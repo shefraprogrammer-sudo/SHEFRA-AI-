@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+<title>Shefra Admin</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--tx:#14172a;--mu:#6a7089;--ac:#5b5cf0;--bd:#e0e3ee;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#0a0c16;--card:#161a2e;--tx:#eef0ff;--mu:#9aa0c3;--ac:#8b8cff;--bd:#272c47;color-scheme:dark}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font-family:"Segoe UI",Tahoma,Arial,sans-serif;padding:20px}
+.w{max-width:720px;margin:0 auto}h1{font-size:22px;margin:0 0 16px}
+.s{display:flex;gap:12px;margin-bottom:16px}.c{flex:1;background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px}.c b{display:block;font-size:28px;color:var(--ac)}.c span{color:var(--mu);font-size:13px}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--bd);border-radius:16px;overflow:hidden}
+th,td{padding:12px 14px;text-align:right;border-bottom:1px solid var(--bd)}th{color:var(--mu);font-size:13px}tr:last-child td{border:0}
+button{background:var(--ac);color:#fff;border:0;border-radius:12px;padding:11px 22px;font:inherit;cursor:pointer}
+#msg{color:var(--mu);margin:14px 0}
+</style></head><body><div class="w"><h1>لوحة الأدمن | SHEFRA AI</h1>
+<div id="msg">جاري التحميل...</div><button id="in" hidden>الدخول بحساب جوجل</button> <button id="out" hidden>خروج</button>
+<div id="app" hidden><div class="s"><div class="c"><b id="n1">0</b><span>إجمالي المسجلين</span></div><div class="c"><b id="n2">0</b><span>سجّلوا النهاردة</span></div></div>
+<table><thead><tr><th>#</th><th>الاسم</th><th>تاريخ التسجيل</th></tr></thead><tbody id="tb"></tbody></table></div></div>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import {getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+import {getFirestore,collection,query,orderBy,getDocs} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+const ADMIN="shefraprogrammer@gmail.com";
+const app=initializeApp({apiKey:"AIzaSyBoFoDNsLx-UGxFKMaSNWBCjjR_geXs2bo",authDomain:"shefra-ai.firebaseapp.com",projectId:"shefra-ai",storageBucket:"shefra-ai.firebasestorage.app",messagingSenderId:"118805472184",appId:"1:118805472184:web:9e30d6de84624d8a3aa54d"}),auth=getAuth(app),db=getFirestore(app);
+const $=i=>document.getElementById(i);
+$("in").onclick=()=>signInWithPopup(auth,new GoogleAuthProvider()).catch(()=>{});
+$("out").onclick=()=>signOut(auth);
+onAuthStateChanged(auth,async u=>{
+$("app").hidden=true;$("in").hidden=!!u;$("out").hidden=!u;
+if(!u){$("msg").textContent="سجّل دخولك بحساب الأدمن.";return}
+if(u.email!==ADMIN){$("msg").textContent="الحساب ده مش مسموح له يفتح الصفحة.";return}
+$("msg").textContent="";
+try{const s=await getDocs(query(collection(db,"users"),orderBy("createdAt","desc")));
+const tb=$("tb");tb.innerHTML="";let today=0,i=0;const d0=new Date().toDateString();
+s.forEach(d=>{const x=d.data(),t=x.createdAt?x.createdAt.toDate():null;if(t&&t.toDateString()===d0)today++;
+const tr=document.createElement("tr");[s.size-i,x.name||"-",t?t.toLocaleString("ar-EG"):"-"].forEach(v=>{const td=document.createElement("td");td.textContent=v;tr.appendChild(td)});tb.appendChild(tr);i++});
+$("n1").textContent=s.size;$("n2").textContent=today;$("app").hidden=false}
+catch(e){$("msg").textContent="مقدرتش أقرا البيانات. اتأكد إنك نشرت قواعد Firestore."}
+});
+</script></body></html>

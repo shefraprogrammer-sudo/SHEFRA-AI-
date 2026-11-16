@@ -64,17 +64,23 @@ textarea::placeholder{color:var(--mu)}
 .box h3{margin:0 0 8px;font-size:19px}.box p{margin:0 0 18px;color:var(--mu);line-height:1.8}
 .box .x{display:block;margin:12px auto 0;background:none;border:0;color:var(--mu);font:inherit;cursor:pointer}
 @media (min-width:700px){header,form{margin-inline:0}header{margin-top:16px}form{margin-bottom:18px}}
+.un{font-size:13px;color:var(--mu);max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:480px){.un{display:none}}
+.gp{font-size:12px;color:var(--mu);margin:14px 0 0}
+.gerr{color:#f87171;margin:12px 0 0;font-size:13px;min-height:1em}
+.g{display:inline-flex;align-items:center;gap:10px}
 </style>
 </head>
 <body>
 <div class="wrap">
 <header>
 <div class="brand"><div class="orb" id="horb"></div><span>SHEFRA <i>AI</i></span></div>
-<div class="hr"><button class="about" id="about" type="button">حول</button></div>
+<div class="hr"><span class="un" id="un"></span><button class="about" id="out" type="button" hidden>خروج</button><button class="about" id="about" type="button">حول</button></div>
 </header>
 <div id="log"><div class="hi" id="hi"><div class="orb"></div><h1>أهلاً بيك في <i>شفرة</i></h1><p>اسألني في أي حاجة، وأنا أجاوبك.</p></div></div>
 <form id="f"><textarea id="t" rows="1" placeholder="اكتب رسالتك..."></textarea><button id="go" type="submit" aria-label="إرسال"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg></button></form>
 </div>
+<div class="ov" id="gate"><div class="box"><div class="orb"></div><h3>سجّل دخولك عشان تبدأ</h3><p>الدخول بحساب جوجل بياخد ثانية واحدة.</p><button class="btn g" id="gl" type="button">الدخول بحساب جوجل</button><div class="gerr" id="ge"></div><p class="gp">بتسجيل الدخول أنت موافق إننا نحفظ اسمك فقط لتنظيم استخدام الموقع.</p></div></div>
 <div class="ov" id="ov"><div class="box"><div class="orb"></div><h3>تم تطوير هذا الموقع بواسطة SHEFRA</h3><p>تحب تتواصل معانا؟ اضغط وابعتلنا على واتساب.</p><a class="btn wa" id="wa" target="_blank" rel="noopener">تواصل عبر واتساب</a><button class="x" id="cl" type="button">إغلاق</button></div></div>
 <script>
 const API_URL="https://shefra-ai.shefraprogrammer.workers.dev/";
@@ -121,7 +127,9 @@ busy=true;go.disabled=true;t.value="";t.style.height="auto";add("u",q);hist.push
 const out=add("a",'<div class="dots"><span></span><span></span><span></span></div>',true);
 let h2=hist.slice(-20);if(h2[0].role!=="user")h2=h2.slice(1);
 try{
-const res=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:h2})});
+const tok=await window.getToken();if(!tok){window.showGate();throw new Error("auth")}
+const res=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+tok},body:JSON.stringify({messages:h2})});
+if(res.status===401){window.showGate();throw new Error("auth")}
 if(res.status===429)throw{code:"rate_limited"};
 if(!res.ok)throw new Error("api");
 const r=await res.json();
@@ -132,6 +140,23 @@ if(used()>=LIM)paywall();
 }catch(err){hist.pop();out.textContent=err&&err.code==="rate_limited"?"فيه ضغط دلوقتي، جرب بعد دقيقة.":"حصلت مشكلة، جرب تاني."}
 busy=false;go.disabled=false;document.getElementById("horb").classList.remove("busy");t.focus();log.scrollTop=log.scrollHeight});
 ui();
+</script>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import {getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+import {getFirestore,doc,getDoc,setDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+const app=initializeApp({apiKey:"AIzaSyBoFoDNsLx-UGxFKMaSNWBCjjR_geXs2bo",authDomain:"shefra-ai.firebaseapp.com",projectId:"shefra-ai",storageBucket:"shefra-ai.firebasestorage.app",messagingSenderId:"118805472184",appId:"1:118805472184:web:9e30d6de84624d8a3aa54d"});
+const auth=getAuth(app),db=getFirestore(app);
+const $=id=>document.getElementById(id),gate=$("gate");
+window.getToken=()=>auth.currentUser?auth.currentUser.getIdToken():Promise.resolve(null);
+window.showGate=()=>gate.classList.add("on");
+$("gl").onclick=async()=>{$("ge").textContent="";try{await signInWithPopup(auth,new GoogleAuthProvider())}catch(e){$("ge").textContent="تسجيل الدخول ماكملش، جرب تاني."}};
+$("out").onclick=()=>signOut(auth).then(()=>location.reload());
+onAuthStateChanged(auth,async u=>{
+if(!u){gate.classList.add("on");$("un").textContent="";$("out").hidden=true;return}
+gate.classList.remove("on");$("un").textContent=u.displayName||"";$("out").hidden=false;
+try{const r=doc(db,"users",u.uid);if(!(await getDoc(r)).exists())await setDoc(r,{name:u.displayName||"بدون اسم",createdAt:serverTimestamp()})}catch(e){}
+});
 </script>
 </body>
 </html>
