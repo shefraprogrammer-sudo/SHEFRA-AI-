@@ -118,20 +118,10 @@ body{padding-left:300px}
 .end{width:68px;height:68px;border:0;border-radius:50%;background:#ef4444;color:#fff;cursor:pointer;display:grid;place-items:center;box-shadow:0 8px 26px rgba(239,68,68,.4)}
 .end svg{width:28px;height:28px}
 .hint{color:var(--mu);font-size:12.5px;margin-top:10px}
-/* ===== attachments ===== */
-#chips{display:flex;gap:8px;flex-wrap:wrap;margin:6px 12px 0}
-#chips:empty{display:none}
-@media (min-width:700px){#chips{margin-inline:0}}
-.chip{display:inline-flex;align-items:center;gap:8px;max-width:100%;padding:6px 8px 6px 10px;border:1px solid var(--bd);background:var(--card);border-radius:12px;font-size:12.5px}
-.chip img{width:30px;height:30px;border-radius:7px;object-fit:cover}
-.chip b{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
-.chip small{color:var(--mu)}
-.chip.ld small{animation:b 1.1s infinite}
-.chip button{border:0;background:none;color:var(--mu);font-size:18px;cursor:pointer;padding:0 2px;line-height:1}
-.chip button:hover{color:#f87171}
-.tgs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
-.tgs span{background:rgba(255,255,255,.2);padding:3px 10px;border-radius:9px;font-size:12.5px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-body.drag::after{content:"سيب الملف هنا عشان ترفعه";position:fixed;inset:12px;z-index:70;display:grid;place-items:center;border:2px dashed var(--ac);border-radius:24px;background:rgba(91,92,240,.15);backdrop-filter:blur(4px);font-weight:800;font-size:20px;color:var(--ac);pointer-events:none}
+.fc{display:flex;align-items:center;gap:8px;margin:6px 12px 0;padding:8px 12px;border:1px solid var(--bd);background:var(--card);border-radius:14px;font-size:13.5px}
+.fc[hidden]{display:none}.fc span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fc button{border:0;background:none;color:var(--mu);font-size:20px;line-height:1;cursor:pointer;padding:0 2px}.fc button:hover{color:#f87171}
+@media (min-width:700px){.fc{margin-inline:0}}
 </style>
 </head>
 <body>
@@ -143,8 +133,8 @@ body.drag::after{content:"سيب الملف هنا عشان ترفعه";position
 <div class="hr"><button class="menu" id="mn" type="button" aria-label="المحادثات">☰</button><span class="un" id="un"></span><button class="about" id="out" type="button" hidden>خروج</button><button class="about" id="about" type="button">حول</button></div>
 </header>
 <div id="log"><div class="hi" id="hi"><div class="orb"></div><h1>أهلاً بيك في <i>شفرة</i></h1><p>اسألني في أي حاجة، وأنا أجاوبك.</p></div></div>
-<div id="chips"></div>
-<form id="f"><button class="ib" id="pl" type="button" aria-label="إرفاق ملف" title="ارفع ملف أو صورة"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button><input type="file" id="fi" multiple hidden accept=".pdf,.docx,.xlsx,.xls,.csv,.tsv,.txt,.md,.json,.html,.css,.js,.ts,.jsx,.tsx,.py,.java,.c,.cpp,.cs,.php,.sql,.xml,.yml,.yaml,.log,image/*"><textarea id="t" rows="1" placeholder="اكتب رسالتك..."></textarea><button class="ib" id="mic" type="button" aria-label="إملاء صوتي" title="اكتب بصوتك"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg></button><button class="ib" id="cb" type="button" aria-label="محادثة صوتية" title="محادثة صوتية"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 10v4M8 6v12M12 3v18M16 7v10M20 10v4"/></svg></button><button id="go" type="submit" aria-label="إرسال"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg></button></form>
+<div class="fc" id="fc" hidden><span id="fn"></span><button id="fx" type="button" aria-label="إزالة الملف">×</button></div>
+<form id="f"><button class="ib" id="pl" type="button" aria-label="إرفاق ملف" title="إرفاق ملف"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button><input type="file" id="fi" hidden accept=".pdf,.docx,.txt,.md,.csv,.json,.xml,.html,.css,.js,.py,.sql,.log,text/*"><textarea id="t" rows="1" placeholder="اكتب رسالتك..."></textarea><button class="ib" id="mic" type="button" aria-label="إملاء صوتي" title="اكتب بصوتك"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg></button><button class="ib" id="cb" type="button" aria-label="محادثة صوتية" title="محادثة صوتية"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 10v4M8 6v12M12 3v18M16 7v10M20 10v4"/></svg></button><button id="go" type="submit" aria-label="إرسال"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg></button></form>
 </div>
 <div class="call" id="call" data-s="listening"><div><h2>محادثة صوتية مع شفرة</h2><div class="st" id="cst"></div></div><div class="co" id="co" title="اضغط عشان تقاطع"></div><div><div class="cap" id="cap"></div><div class="hint">اضغط على الدائرة عشان توقف الرد وتتكلم</div></div><button class="end" id="ce" type="button" aria-label="إنهاء المكالمة"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
 <div class="toast" id="toast"></div>
@@ -215,19 +205,19 @@ a.append(c,s);out.appendChild(a)}
 function renderChat(){
 log.innerHTML="";
 if(!hist.length){log.innerHTML=HI;return}
-hist.forEach(m=>{if(m.role==="user")addUser(m.shown!==undefined?m.shown:m.content,m.files);else attach(add("a",md(m.content),true),m.content)});
+hist.forEach(m=>{if(m.role==="user")add("u",m.content);else attach(add("a",md(m.content),true),m.content)});
 log.scrollTop=log.scrollHeight}
-function newChat(){if(busy)return;speak.stop();curId=null;hist=[];renderChat();renderList();closeSide()}
-function openChat(id){if(busy)return;const c=chats.find(k=>k.id===id);if(!c)return;speak.stop();curId=id;hist=c.messages.slice();renderChat();renderList();closeSide()}
+function newChat(){if(busy)return;speak.stop();curId=null;hist=[];showFile(null);renderChat();renderList();closeSide()}
+function openChat(id){if(busy)return;const c=chats.find(k=>k.id===id);if(!c)return;speak.stop();curId=id;hist=c.messages.slice();showFile(c.file||null);renderChat();renderList();closeSide()}
 $("nc").onclick=newChat;
 function saveCur(){
 if(!hist.length)return;
 if(!curId)curId=uid8();
 let c=chats.find(k=>k.id===curId);
 if(!c){c={id:curId,title:"",messages:[],updated:0};chats.push(c)}
-const fu=hist.find(m=>m.role==="user")||{};const first=(fu.shown!==undefined?fu.shown:fu.content)||"محادثة";
+const first=(hist.find(m=>m.role==="user")||{}).content||"محادثة";
 c.title=first.replace(/\s+/g," ").slice(0,42)+(first.length>42?"…":"");
-c.messages=hist.map(m=>{const o={role:m.role,content:m.shown!==undefined?m.shown:m.content};if(m.files&&m.files.length)o.files=m.files;return o});c.updated=Date.now();
+c.messages=hist.slice();c.updated=Date.now();c.file=fctx||null;
 window.store&&window.store.save(c);renderList()}
 window.onAuth=async u=>{
 if(!u){chats=[];curId=null;renderList();return}
@@ -269,19 +259,14 @@ async function sendMsg(q,o){
 o=o||{};if(!q||busy)return null;
 if(used()>=LIM){paywall();return null}
 const h=$("hi");if(h)h.remove();$("horb").classList.add("on","busy");
-const atts=o.voice?[]:att.splice(0);renderChips();
-let full=q;const tx=atts.map(a=>a.kind==="img"?"[صورة مرفقة: "+a.name+"]":"[الملف المرفق: "+a.name+"]\n"+a.text+"\n[نهاية الملف]");if(tx.length)full=q+"\n\n"+tx.join("\n\n");
-const files=atts.map(a=>({name:a.name,kind:a.kind}));
-busy=true;go.disabled=true;addUser(q,files);hist.push(files.length?{role:"user",content:full,shown:q,files:files}:{role:"user",content:q});
+busy=true;go.disabled=true;add("u",q);hist.push({role:"user",content:q});
 const out=add("a",'<div class="dots"><span></span><span></span><span></span></div>',true);
-let h2=hist.slice(-20).map(m=>({role:m.role,content:m.content}));if(h2[0].role!=="user")h2=h2.slice(1);
+let h2=hist.slice(-20);if(h2[0].role!=="user")h2=h2.slice(1);
 if(o.voice){h2=h2.slice();h2[h2.length-1]={role:"user",content:q+VOICE_HINT}}
-const imgs=atts.filter(a=>a.img);
-if(imgs.length)h2[h2.length-1]={role:"user",content:[...imgs.map(a=>({type:"image",source:{type:"base64",media_type:a.img.type,data:a.img.data}})),{type:"text",text:full}]};
 let res_txt=null;
 try{
 const tok=await window.getToken();if(!tok){window.showGate();throw new Error("auth")}
-const res=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+tok},body:JSON.stringify({messages:h2})});
+const res=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+tok},body:JSON.stringify({messages:h2,file:fctx})});
 if(res.status===401){window.showGate();throw new Error("auth")}
 if(res.status===429)throw{code:"rate_limited"};
 if(!res.ok)throw new Error("api");
@@ -289,65 +274,10 @@ const r=await res.json();
 const txt=r.text||"";out.innerHTML=md(txt);hist.push({role:"assistant",content:txt});bump();ui();
 attach(out,txt);saveCur();res_txt=txt;
 if(used()>=LIM)paywall();
-}catch(err){hist.pop();att.unshift(...atts);renderChips();out.textContent=err&&err.code==="rate_limited"?"فيه ضغط دلوقتي، جرب بعد دقيقة.":(imgs.length&&err&&err.message==="api"?"معرفتش أبعت الصورة. جرب تشيلها أو ارفع ملف نصي أو PDF.":"حصلت مشكلة، جرب تاني.")}
+}catch(err){hist.pop();out.textContent=err&&err.code==="rate_limited"?"فيه ضغط دلوقتي، جرب بعد دقيقة.":"حصلت مشكلة، جرب تاني."}
 busy=false;go.disabled=false;$("horb").classList.remove("busy");if(!o.voice)t.focus();log.scrollTop=log.scrollHeight;
 return res_txt}
-$("f").addEventListener("submit",e=>{e.preventDefault();stopDict();let q=t.value.trim();if((!q&&!att.length)||busy)return;if(att.some(a=>a.status==="ld")){toast("استنى لحظة، الملف لسه بيتقري…");return}if(!q)q="اقرأ المرفقات دي ولخصها ليا.";t.value="";t.style.height="auto";sendMsg(q)});
-/* ---------- attachments ---------- */
-const att=[],chipsEl=$("chips"),fi=$("fi");
-const MAXF=5,MAXB=15*1024*1024,CAPC=40000;
-const PDFJS="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js",PDFW="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js",MAM="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js",XLS="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js";
-const libs={};
-function lib(u){return libs[u]||(libs[u]=new Promise((ok,no)=>{const s=document.createElement("script");s.src=u;s.onload=ok;s.onerror=()=>{delete libs[u];no(new Error("lib"))};document.head.appendChild(s)}))}
-const ext=n=>(n.split(".").pop()||"").toLowerCase();
-const TXT=["txt","md","csv","tsv","json","html","htm","css","js","ts","jsx","tsx","py","java","c","cpp","cs","php","sql","xml","yml","yaml","log"];
-const fmt=n=>n>1048576?(n/1048576).toFixed(1)+" MB":Math.max(1,Math.round(n/1024))+" KB";
-function renderChips(){
-chipsEl.innerHTML="";
-att.forEach(a=>{const c=document.createElement("div");c.className="chip"+(a.status==="ld"?" ld":"");
-if(a.thumb){const i=document.createElement("img");i.src=a.thumb;c.appendChild(i)}else{const e=document.createElement("span");e.textContent="📎";c.appendChild(e)}
-const n=document.createElement("b");n.textContent=a.name;c.appendChild(n);
-const z=document.createElement("small");z.textContent=a.status==="ld"?"بيتقري…":fmt(a.size);c.appendChild(z);
-const x=document.createElement("button");x.type="button";x.setAttribute("aria-label","شيل الملف");x.textContent="×";
-x.onclick=()=>{const k=att.indexOf(a);if(k>-1)att.splice(k,1);renderChips()};c.appendChild(x);chipsEl.appendChild(c)})}
-function readImg(f){return new Promise((ok,no)=>{const r=new FileReader();r.onerror=()=>no(new Error("read"));
-r.onload=()=>{const im=new Image();im.onerror=()=>no(new Error("read"));
-im.onload=()=>{const k=Math.min(1,1568/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
-const g=c.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,c.width,c.height);g.drawImage(im,0,0,c.width,c.height);
-const u=c.toDataURL("image/jpeg",.85);ok({kind:"img",img:{type:"image/jpeg",data:u.split(",")[1]},thumb:u})};
-im.src=r.result};r.readAsDataURL(f)})}
-async function readFile(f){
-const e=ext(f.name);
-if(f.type.startsWith("image/"))return readImg(f);
-if(e==="pdf"){await lib(PDFJS);pdfjsLib.GlobalWorkerOptions.workerSrc=PDFW;
-const d=await pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise;let o="";const n=Math.min(d.numPages,80);
-for(let i=1;i<=n;i++){const c=await(await d.getPage(i)).getTextContent();o+=c.items.map(x=>x.str).join(" ")+"\n\n";if(o.length>CAPC*1.2)break}
-if(!o.trim())throw new Error("scan");return{kind:"file",text:o}}
-if(e==="docx"){await lib(MAM);return{kind:"file",text:(await mammoth.extractRawText({arrayBuffer:await f.arrayBuffer()})).value}}
-if(e==="xlsx"||e==="xls"){await lib(XLS);const w=XLSX.read(await f.arrayBuffer(),{type:"array"});
-return{kind:"file",text:w.SheetNames.map(n=>"## "+n+"\n"+XLSX.utils.sheet_to_csv(w.Sheets[n])).join("\n\n")}}
-if(TXT.includes(e)||f.type.startsWith("text/")||f.type==="application/json")return{kind:"file",text:await f.text()};
-throw new Error("type")}
-async function addFiles(list){
-for(const f of Array.from(list)){
-if(att.length>=MAXF){toast("أقصى عدد "+MAXF+" ملفات في الرسالة.");break}
-if(f.size>MAXB){toast(f.name+" كبير أوي (الحد 15 ميجا).");continue}
-const a={name:f.name,size:f.size,status:"ld",kind:"file"};att.push(a);renderChips();
-try{const r=await readFile(f);Object.assign(a,r);
-if(a.kind==="file"){if(!a.text.trim())throw new Error("empty");if(a.text.length>CAPC)a.text=a.text.slice(0,CAPC)+"\n[... تم اقتطاع باقي الملف لأنه طويل]"}
-a.status="ok"}
-catch(er){const k=att.indexOf(a);if(k>-1)att.splice(k,1);
-toast(er.message==="scan"?"الـ PDF ده صور مفيهوش نص يتقري.":er.message==="type"?"نوع الملف ."+ext(f.name)+" مش مدعوم.":er.message==="empty"?"الملف فاضي.":er.message==="lib"?"معرفتش أحمّل أداة قراءة الملف، اتأكد من النت.":"معرفتش أقرا "+f.name)}
-renderChips()}}
-function addUser(q,files){const d=add("u",q);if(files&&files.length){const w=document.createElement("div");w.className="tgs";files.forEach(f=>{const s=document.createElement("span");s.textContent=(f.kind==="img"?"🖼 ":"📎 ")+f.name;w.appendChild(s)});d.prepend(w)}return d}
-$("pl").onclick=()=>fi.click();
-fi.onchange=()=>{addFiles(fi.files);fi.value=""};
-t.addEventListener("paste",e=>{const fl=e.clipboardData&&e.clipboardData.files;if(fl&&fl.length){e.preventDefault();addFiles(fl)}});
-let dc=0;
-addEventListener("dragenter",e=>{if(e.dataTransfer&&Array.from(e.dataTransfer.types).includes("Files")){dc++;document.body.classList.add("drag")}});
-addEventListener("dragleave",()=>{dc=Math.max(0,dc-1);if(!dc)document.body.classList.remove("drag")});
-addEventListener("dragover",e=>e.preventDefault());
-addEventListener("drop",e=>{e.preventDefault();dc=0;document.body.classList.remove("drag");if(e.dataTransfer&&e.dataTransfer.files.length)addFiles(e.dataTransfer.files)});
+$("f").addEventListener("submit",e=>{e.preventDefault();stopDict();const q=t.value.trim()||(fctx?"لخّصلي الملف المرفق.":"");if(!q||busy)return;t.value="";t.style.height="auto";sendMsg(q)});
 /* ---------- voice call ---------- */
 const call={on:false,rec:null,tok:0};
 const callEl=$("call"),cst=$("cst"),cap=$("cap");
@@ -377,12 +307,43 @@ stopDict();speak.stop();call.on=true;cap.textContent="";callEl.classList.add("on
 function endCall(){call.on=false;call.tok++;try{call.rec&&call.rec.abort()}catch(e){}speak.stop();callEl.classList.remove("on")}
 $("cb").onclick=startCall;$("ce").onclick=endCall;
 $("co").onclick=()=>{if(!call.on||busy)return;try{call.rec&&call.rec.abort()}catch(e){}speak.stop();call.tok++;listen()};
+/* ---------- file attach ---------- */
+let fctx=null;
+const MAXC=12000,TXT=/\.(txt|md|csv|tsv|json|xml|html?|css|js|ts|jsx|py|java|c|cpp|cs|php|rb|go|sql|log|ya?ml|ini|srt)$/i;
+const PDFJS="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/",MAM="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.2/mammoth.browser.min.js";
+const loadScript=src=>new Promise((ok,no)=>{const s=document.createElement("script");s.src=src;s.onload=ok;s.onerror=no;document.head.appendChild(s)});
+function showFile(o){fctx=o;$("fc").hidden=!o;if(o)$("fn").textContent="📎 "+o.name}
+function setFile(o){showFile(o);const c=chats.find(k=>k.id===curId);if(c){c.file=o;window.store&&window.store.save(c)}}
+async function extract(f){
+const n=f.name.toLowerCase();
+if(f.type.startsWith("text/")||TXT.test(n))return await f.text();
+if(n.endsWith(".pdf")){if(!window.pdfjsLib)await loadScript(PDFJS+"pdf.min.js");
+pdfjsLib.GlobalWorkerOptions.workerSrc=PDFJS+"pdf.worker.min.js";
+const d=await pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise;let s="";
+for(let i=1;i<=Math.min(d.numPages,40)&&s.length<MAXC*1.3;i++){const c=await(await d.getPage(i)).getTextContent();s+=c.items.map(x=>x.str).join(" ")+"\n"}
+return s}
+if(n.endsWith(".docx")){if(!window.mammoth)await loadScript(MAM);return (await mammoth.extractRawText({arrayBuffer:await f.arrayBuffer()})).value}
+if(f.type.startsWith("image/")){toast("الصور لسه مش مدعومة. ارفع PDF أو Word أو ملف نصي.");return undefined}
+return null}
+$("pl").onclick=()=>$("fi").click();
+$("fx").onclick=()=>setFile(null);
+$("fi").onchange=async e=>{const f=e.target.files[0];e.target.value="";if(!f)return;
+if(f.size>8*1024*1024){toast("الملف كبير، الحد الأقصى 8 ميجا.");return}
+$("fc").hidden=false;$("fn").textContent="⏳ بقرا الملف...";
+try{let tx=await extract(f);
+if(tx===undefined){showFile(fctx);return}
+if(tx===null){toast("النوع ده مش مدعوم. ارفع PDF أو Word أو ملف نصي.");showFile(fctx);return}
+tx=tx.replace(/[ \t]+/g," ").replace(/\n\s*\n+/g,"\n").trim();
+if(!tx){toast("مقدرتش ألاقي نص في الملف (ممكن يكون صور مصوّرة).");showFile(fctx);return}
+setFile({name:f.name,text:tx.slice(0,MAXC)});
+toast(tx.length>MAXC?"الملف طويل، هقرا أول "+MAXC+" حرف بس.":"تم إرفاق الملف ✓");t.focus()}
+catch(x){toast("مقدرتش أقرا الملف.");showFile(fctx)}};
 ui();
 </script>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import {getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-import {getFirestore,doc,getDoc,setDoc,deleteDoc,collection,getDocs,serverTimestamp} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import {getFirestore,doc,getDoc,setDoc,deleteDoc,updateDoc,collection,getDocs,serverTimestamp} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 const app=initializeApp({apiKey:"AIzaSyBoFoDNsLx-UGxFKMaSNWBCjjR_geXs2bo",authDomain:"shefra-ai.firebaseapp.com",projectId:"shefra-ai",storageBucket:"shefra-ai.firebasestorage.app",messagingSenderId:"118805472184",appId:"1:118805472184:web:9e30d6de84624d8a3aa54d"});
 const auth=getAuth(app),db=getFirestore(app);
 const $=id=>document.getElementById(id),gate=$("gate");
@@ -401,10 +362,14 @@ window.getToken=()=>auth.currentUser?auth.currentUser.getIdToken():Promise.resol
 window.showGate=()=>gate.classList.add("on");
 $("gl").onclick=async()=>{$("ge").textContent="";try{await signInWithPopup(auth,new GoogleAuthProvider())}catch(e){$("ge").textContent="تسجيل الدخول ماكملش، جرب تاني."}};
 $("out").onclick=()=>signOut(auth).then(()=>location.reload());
+let hbT=null,lb=0;
+const beat=()=>{const n=Date.now();if(!auth.currentUser||document.visibilityState!=="visible"||n-lb<60000)return;lb=n;updateDoc(doc(db,"users",auth.currentUser.uid),{lastSeen:serverTimestamp()}).catch(()=>{})};
+document.addEventListener("visibilitychange",beat);
 onAuthStateChanged(auth,async u=>{
-if(!u){gate.classList.add("on");$("un").textContent="";$("out").hidden=true;window.onAuth&&window.onAuth(null);return}
+if(!u){gate.classList.add("on");$("un").textContent="";$("out").hidden=true;window.onAuth&&window.onAuth(null);clearInterval(hbT);return}
 gate.classList.remove("on");$("un").textContent=u.displayName||"";$("out").hidden=false;window.onAuth&&window.onAuth(u);
 try{const r=doc(db,"users",u.uid);if(!(await getDoc(r)).exists())await setDoc(r,{name:u.displayName||"بدون اسم",createdAt:serverTimestamp()})}catch(e){}
+beat();clearInterval(hbT);hbT=setInterval(beat,180000);
 });
 </script>
 </body>
