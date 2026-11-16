@@ -69,24 +69,77 @@ textarea::placeholder{color:var(--mu)}
 .gp{font-size:12px;color:var(--mu);margin:14px 0 0}
 .gerr{color:#f87171;margin:12px 0 0;font-size:13px;min-height:1em}
 .g{display:inline-flex;align-items:center;gap:10px}
+
+/* ===== sidebar / history ===== */
+.side{position:fixed;top:0;bottom:0;left:0;width:min(300px,86vw);z-index:15;display:flex;flex-direction:column;background:var(--bg2);border-right:1px solid var(--bd);padding:calc(14px + env(safe-area-inset-top,0px)) 12px calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-102%);transition:transform .28s ease;box-shadow:8px 0 40px rgba(0,0,0,.18)}
+.side.open{transform:none}
+.sb{position:fixed;inset:0;z-index:14;background:rgba(5,6,15,.5);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);display:none}
+.sb.on{display:block}
+.sh{display:flex;align-items:center;justify-content:space-between;margin:2px 4px 12px;font-weight:800;font-size:15px}
+.sh button{border:0;background:none;color:var(--mu);font-size:22px;cursor:pointer;line-height:1}
+.newc{display:flex;align-items:center;justify-content:center;gap:8px;border:1px dashed var(--ac);background:transparent;color:var(--ac);font:inherit;font-weight:700;font-size:14px;padding:11px;border-radius:14px;cursor:pointer;margin-bottom:12px}
+.newc:hover{background:var(--glow)}
+#cl2{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:4px;margin:0 -4px;padding:0 4px}
+.ci{display:flex;align-items:center;gap:6px;padding:10px 12px;border-radius:12px;cursor:pointer;font-size:14px;border:1px solid transparent}
+.ci:hover{background:var(--card)}
+.ci.cur{background:var(--card);border-color:var(--ac)}
+.ci span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ci button{border:0;background:none;color:var(--mu);cursor:pointer;font-size:17px;padding:0 2px;opacity:.6}
+.ci button:hover{color:#f87171;opacity:1}
+.emp{color:var(--mu);font-size:13.5px;text-align:center;padding:24px 10px;line-height:1.9}
+.menu{display:grid;place-items:center;width:36px;height:36px;border:1px solid var(--bd);background:transparent;color:var(--tx);border-radius:12px;cursor:pointer;font-size:18px;padding:0}
+@media (min-width:900px){
+.side{transform:none;box-shadow:none}
+.sb{display:none!important}
+.menu,.sh button{display:none}
+body{padding-left:300px}
+}
+/* ===== voice buttons ===== */
+.ib{width:44px;height:44px;flex:none;border:1px solid var(--bd);border-radius:14px;cursor:pointer;color:var(--tx);background:transparent;display:grid;place-items:center;padding:0}
+.ib:hover{border-color:var(--ac);color:var(--ac)}
+.ib svg{width:20px;height:20px}
+.ib.rec{background:#ef4444;border-color:#ef4444;color:#fff;animation:pulse 1.2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(239,68,68,.5)}100%{box-shadow:0 0 0 14px rgba(239,68,68,0)}}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:13.5px;z-index:60;max-width:90vw;text-align:center;opacity:0;pointer-events:none;transition:opacity .25s}
+.toast.on{opacity:1}
+/* ===== voice call ===== */
+.call{position:fixed;inset:0;z-index:40;display:none;flex-direction:column;align-items:center;justify-content:space-between;padding:calc(40px + env(safe-area-inset-top,0px)) 24px calc(40px + env(safe-area-inset-bottom,0px));background:radial-gradient(700px 500px at 50% 30%,var(--glow),transparent 65%),var(--bg);text-align:center}
+.call.on{display:flex}
+.call h2{margin:0;font-size:20px;font-weight:800}
+.call .st{color:var(--mu);font-size:15px;margin-top:6px;min-height:1.4em}
+.co{position:relative;width:170px;height:170px;border-radius:50%;cursor:pointer;background:conic-gradient(from 200deg,var(--ac),var(--ac2),var(--ac));box-shadow:0 0 60px var(--glow);animation:spin 8s linear infinite;transition:transform .2s}
+.call[data-s=listening] .co{animation:spin 8s linear infinite,breathe 1.6s ease-in-out infinite}
+.call[data-s=thinking] .co{animation:spin 1.6s linear infinite}
+.call[data-s=speaking] .co{animation:spin 5s linear infinite,talk .55s ease-in-out infinite}
+@keyframes breathe{50%{transform:scale(1.08);box-shadow:0 0 90px var(--ac)}}
+@keyframes talk{0%,100%{transform:scale(1)}50%{transform:scale(1.14);box-shadow:0 0 100px var(--ac2)}}
+.cap{max-width:560px;max-height:30vh;overflow-y:auto;color:var(--tx);line-height:1.9;font-size:16px;min-height:3em}
+.cap small{display:block;color:var(--mu);font-size:13px;margin-bottom:4px}
+.end{width:68px;height:68px;border:0;border-radius:50%;background:#ef4444;color:#fff;cursor:pointer;display:grid;place-items:center;box-shadow:0 8px 26px rgba(239,68,68,.4)}
+.end svg{width:28px;height:28px}
+.hint{color:var(--mu);font-size:12.5px;margin-top:10px}
 </style>
 </head>
 <body>
+<aside class="side" id="side"><div class="sh"><span>محادثاتك السابقة</span><button id="sx" type="button" aria-label="إغلاق">×</button></div><button class="newc" id="nc" type="button">＋ محادثة جديدة</button><div id="cl2"></div></aside>
+<div class="sb" id="sb"></div>
 <div class="wrap">
 <header>
 <div class="brand"><div class="orb" id="horb"></div><span>SHEFRA <i>AI</i></span></div>
-<div class="hr"><span class="un" id="un"></span><button class="about" id="out" type="button" hidden>خروج</button><button class="about" id="about" type="button">حول</button></div>
+<div class="hr"><button class="menu" id="mn" type="button" aria-label="المحادثات">☰</button><span class="un" id="un"></span><button class="about" id="out" type="button" hidden>خروج</button><button class="about" id="about" type="button">حول</button></div>
 </header>
 <div id="log"><div class="hi" id="hi"><div class="orb"></div><h1>أهلاً بيك في <i>شفرة</i></h1><p>اسألني في أي حاجة، وأنا أجاوبك.</p></div></div>
-<form id="f"><textarea id="t" rows="1" placeholder="اكتب رسالتك..."></textarea><button id="go" type="submit" aria-label="إرسال"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg></button></form>
+<form id="f"><textarea id="t" rows="1" placeholder="اكتب رسالتك..."></textarea><button class="ib" id="mic" type="button" aria-label="إملاء صوتي" title="اكتب بصوتك"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg></button><button class="ib" id="cb" type="button" aria-label="محادثة صوتية" title="محادثة صوتية"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 10v4M8 6v12M12 3v18M16 7v10M20 10v4"/></svg></button><button id="go" type="submit" aria-label="إرسال"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg></button></form>
 </div>
+<div class="call" id="call" data-s="listening"><div><h2>محادثة صوتية مع شفرة</h2><div class="st" id="cst"></div></div><div class="co" id="co" title="اضغط عشان تقاطع"></div><div><div class="cap" id="cap"></div><div class="hint">اضغط على الدائرة عشان توقف الرد وتتكلم</div></div><button class="end" id="ce" type="button" aria-label="إنهاء المكالمة"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+<div class="toast" id="toast"></div>
 <div class="ov" id="gate"><div class="box"><div class="orb"></div><h3>سجّل دخولك عشان تبدأ</h3><p>الدخول بحساب جوجل بياخد ثانية واحدة.</p><button class="btn g" id="gl" type="button">الدخول بحساب جوجل</button><div class="gerr" id="ge"></div><p class="gp">بتسجيل الدخول أنت موافق إننا نحفظ اسمك فقط لتنظيم استخدام الموقع.</p></div></div>
 <div class="ov" id="ov"><div class="box"><div class="orb"></div><h3>تم تطوير هذا الموقع بواسطة SHEFRA</h3><p>تحب تتواصل معانا؟ اضغط وابعتلنا على واتساب.</p><a class="btn wa" id="wa" target="_blank" rel="noopener">تواصل عبر واتساب</a><button class="x" id="cl" type="button">إغلاق</button></div></div>
 <script>
 const API_URL="https://shefra-ai.shefraprogrammer.workers.dev/";
 const NUM="201091462051",LIM=Infinity;
 const log=document.getElementById("log"),t=document.getElementById("t"),go=document.getElementById("go");
-let hist=[],busy=false;
+let hist=[],busy=false,chats=[],curId=null;
 const wa=m=>"https://wa.me/"+NUM+"?text="+encodeURIComponent(m);
 document.getElementById("wa").href=wa("السلام عليكم ورحمة الله وبركاته، أنا جاي من موقع SHEFRA AI وحابب أتواصل معاكم.");
 const ov=document.getElementById("ov");
@@ -119,13 +172,93 @@ d.querySelector("a").href=wa("السلام عليكم ورحمة الله وبر
 log.appendChild(d);log.scrollTop=log.scrollHeight}
 t.addEventListener("input",()=>{t.style.height="auto";t.style.height=Math.min(t.scrollHeight,140)+"px"});
 t.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey&&window.innerWidth>700){e.preventDefault();document.getElementById("f").requestSubmit()}});
-document.getElementById("f").addEventListener("submit",async e=>{
-e.preventDefault();const q=t.value.trim();if(!q||busy)return;
-if(used()>=LIM){paywall();return}
-const h=document.getElementById("hi");if(h)h.remove();document.getElementById("horb").classList.add("on","busy");
-busy=true;go.disabled=true;t.value="";t.style.height="auto";add("u",q);hist.push({role:"user",content:q});
+
+const HI=log.innerHTML;
+const $=id=>document.getElementById(id);
+let tt;function toast(m){const x=$("toast");x.textContent=m;x.classList.add("on");clearTimeout(tt);tt=setTimeout(()=>x.classList.remove("on"),3200)}
+/* ---------- history ---------- */
+const side=$("side"),sb=$("sb");
+const openSide=()=>{side.classList.add("open");sb.classList.add("on")},closeSide=()=>{side.classList.remove("open");sb.classList.remove("on")};
+$("mn").onclick=openSide;$("sx").onclick=closeSide;sb.onclick=closeSide;
+const uid8=()=>(window.crypto&&crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2,8));
+function renderList(){
+const l=$("cl2");l.innerHTML="";
+if(!chats.length){l.innerHTML='<div class="emp">مفيش محادثات سابقة لسه.<br>ابدأ تكلم مع شفرة وهتلاقيها هنا.</div>';return}
+chats.slice().sort((x,y)=>y.updated-x.updated).forEach(c=>{
+const r=document.createElement("div");r.className="ci"+(c.id===curId?" cur":"");
+const sp=document.createElement("span");sp.textContent=c.title;
+const x=document.createElement("button");x.type="button";x.textContent="🗑";x.title="حذف";
+x.onclick=ev=>{ev.stopPropagation();if(!confirm("تحذف المحادثة دي؟"))return;chats=chats.filter(k=>k.id!==c.id);window.store&&window.store.del(c.id);if(curId===c.id)newChat();else renderList()};
+r.onclick=()=>openChat(c.id);r.append(sp,x);l.appendChild(r)})}
+function attach(out,txt){
+const a=document.createElement("div");a.className="act";
+const c=document.createElement("button");c.type="button";c.textContent="نسخ";
+c.onclick=()=>{try{navigator.clipboard.writeText(txt);c.textContent="تم النسخ ✓"}catch(x){}};
+const s=document.createElement("button");s.type="button";s.textContent="🔊 استماع";
+s.onclick=()=>{if(speechSynthesis.speaking&&!call.on){speak.stop();s.textContent="🔊 استماع"}else{s.textContent="⏹ إيقاف";speak(txt,()=>{s.textContent="🔊 استماع"})}};
+a.append(c,s);out.appendChild(a)}
+function renderChat(){
+log.innerHTML="";
+if(!hist.length){log.innerHTML=HI;return}
+hist.forEach(m=>{if(m.role==="user")add("u",m.content);else attach(add("a",md(m.content),true),m.content)});
+log.scrollTop=log.scrollHeight}
+function newChat(){if(busy)return;speak.stop();curId=null;hist=[];renderChat();renderList();closeSide()}
+function openChat(id){if(busy)return;const c=chats.find(k=>k.id===id);if(!c)return;speak.stop();curId=id;hist=c.messages.slice();renderChat();renderList();closeSide()}
+$("nc").onclick=newChat;
+function saveCur(){
+if(!hist.length)return;
+if(!curId)curId=uid8();
+let c=chats.find(k=>k.id===curId);
+if(!c){c={id:curId,title:"",messages:[],updated:0};chats.push(c)}
+const first=(hist.find(m=>m.role==="user")||{}).content||"محادثة";
+c.title=first.replace(/\s+/g," ").slice(0,42)+(first.length>42?"…":"");
+c.messages=hist.slice();c.updated=Date.now();
+window.store&&window.store.save(c);renderList()}
+window.onAuth=async u=>{
+if(!u){chats=[];curId=null;renderList();return}
+chats=await window.store.load(u.uid);renderList()};
+/* ---------- speech ---------- */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const LANG="ar-EG";
+let voices=[];const loadV=()=>{voices=speechSynthesis.getVoices()};loadV();speechSynthesis.onvoiceschanged=loadV;
+function pickVoice(){return voices.find(v=>v.lang.replace("_","-").toLowerCase()==="ar-eg")||voices.find(v=>v.lang.toLowerCase().startsWith("ar"))||null}
+function plain(s){return s.replace(/```[\s\S]*?(```|$)/g," كود برمجي. ").replace(/`([^`]+)`/g,"$1").replace(/\*\*?|#{1,4}\s?|[_~>]/g,"").replace(/\[([^\]]+)\]\([^)]+\)/g,"$1").replace(/\p{Extended_Pictographic}/gu,"").replace(/^\s*[-•]\s+/gm,"").replace(/\s+/g," ").trim()}
+function chunks(s){const p=s.match(/[^.!?؟،,\n]+[.!?؟]*/g)||[s];const o=[];let cur="";p.forEach(x=>{if((cur+x).length>170&&cur){o.push(cur);cur=x}else cur+=x});if(cur.trim())o.push(cur);return o}
+let spTok=0;
+function speak(text,done){
+speechSynthesis.cancel();const tok=++spTok;const parts=chunks(plain(text));
+if(!parts.length){done&&done();return}
+const v=pickVoice();let i=0;
+const next=()=>{if(tok!==spTok)return;if(i>=parts.length){done&&done();return}
+const u=new SpeechSynthesisUtterance(parts[i++]);u.lang=v?v.lang:"ar-SA";if(v)u.voice=v;u.rate=1;
+u.onend=next;u.onerror=()=>{if(tok===spTok)next()};speechSynthesis.speak(u)};
+next()}
+speak.stop=()=>{spTok++;speechSynthesis.cancel()};
+/* dictation: voice -> text */
+let dr=null;const mic=$("mic");
+function stopDict(){if(dr){try{dr.stop()}catch(e){}}}
+mic.onclick=()=>{
+if(!SR){toast("المتصفح ده مش بيدعم الكتابة بالصوت. جرب Google Chrome.");return}
+if(dr){stopDict();return}
+if(call.on)return;
+const r=new SR();dr=r;r.lang=LANG;r.continuous=true;r.interimResults=true;
+const base=t.value?t.value.replace(/\s+$/,"")+" ":"";
+r.onresult=e=>{let f="",n="";for(let i=0;i<e.results.length;i++){const x=e.results[i];if(x.isFinal)f+=x[0].transcript;else n+=x[0].transcript}
+t.value=base+f+n;t.dispatchEvent(new Event("input"))};
+r.onerror=e=>{if(e.error==="not-allowed"||e.error==="service-not-allowed")toast("لازم تسمح للمتصفح باستخدام الميكروفون.");else if(e.error==="no-speech")toast("مسمعتش صوت، جرب تاني.")};
+r.onend=()=>{dr=null;mic.classList.remove("rec");t.focus()};
+try{r.start();mic.classList.add("rec")}catch(x){dr=null}};
+/* ---------- send ---------- */
+const VOICE_HINT="\n\n(ملحوظة: الرد ده هيتقري بصوت عالي، فخليه قصير وبسيط ومحادثة طبيعية، من غير جداول أو رموز أو كود.)";
+async function sendMsg(q,o){
+o=o||{};if(!q||busy)return null;
+if(used()>=LIM){paywall();return null}
+const h=$("hi");if(h)h.remove();$("horb").classList.add("on","busy");
+busy=true;go.disabled=true;add("u",q);hist.push({role:"user",content:q});
 const out=add("a",'<div class="dots"><span></span><span></span><span></span></div>',true);
 let h2=hist.slice(-20);if(h2[0].role!=="user")h2=h2.slice(1);
+if(o.voice){h2=h2.slice();h2[h2.length-1]={role:"user",content:q+VOICE_HINT}}
+let res_txt=null;
 try{
 const tok=await window.getToken();if(!tok){window.showGate();throw new Error("auth")}
 const res=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+tok},body:JSON.stringify({messages:h2})});
@@ -134,27 +267,68 @@ if(res.status===429)throw{code:"rate_limited"};
 if(!res.ok)throw new Error("api");
 const r=await res.json();
 const txt=r.text||"";out.innerHTML=md(txt);hist.push({role:"assistant",content:txt});bump();ui();
-const a=document.createElement("div");a.className="act";const c=document.createElement("button");c.type="button";c.textContent="نسخ";
-c.onclick=()=>{try{navigator.clipboard.writeText(txt);c.textContent="تم النسخ ✓"}catch(x){}};a.appendChild(c);out.appendChild(a);
+attach(out,txt);saveCur();res_txt=txt;
 if(used()>=LIM)paywall();
 }catch(err){hist.pop();out.textContent=err&&err.code==="rate_limited"?"فيه ضغط دلوقتي، جرب بعد دقيقة.":"حصلت مشكلة، جرب تاني."}
-busy=false;go.disabled=false;document.getElementById("horb").classList.remove("busy");t.focus();log.scrollTop=log.scrollHeight});
+busy=false;go.disabled=false;$("horb").classList.remove("busy");if(!o.voice)t.focus();log.scrollTop=log.scrollHeight;
+return res_txt}
+$("f").addEventListener("submit",e=>{e.preventDefault();stopDict();const q=t.value.trim();if(!q||busy)return;t.value="";t.style.height="auto";sendMsg(q)});
+/* ---------- voice call ---------- */
+const call={on:false,rec:null,tok:0};
+const callEl=$("call"),cst=$("cst"),cap=$("cap");
+const ST={listening:"بسمعك… اتكلم",thinking:"بفكر…",speaking:"بتكلم…"};
+function setS(s){callEl.dataset.s=s;cst.textContent=ST[s]||""}
+function listen(){
+if(!call.on)return;const my=++call.tok;setS("listening");
+const r=new SR();call.rec=r;r.lang=LANG;r.continuous=false;r.interimResults=true;
+let heard="";
+r.onresult=e=>{let f="",n="";for(let i=0;i<e.results.length;i++){const x=e.results[i];if(x.isFinal)f+=x[0].transcript;else n+=x[0].transcript}
+heard=(f+n).trim();cap.innerHTML="<small>أنت</small>";cap.append(heard)};
+r.onerror=e=>{if(e.error==="not-allowed"||e.error==="service-not-allowed"){toast("لازم تسمح للمتصفح باستخدام الميكروفون.");endCall()}};
+r.onend=()=>{if(!call.on||my!==call.tok)return;
+if(heard)turn(heard);else setTimeout(()=>{if(call.on&&my===call.tok)listen()},250)};
+try{r.start()}catch(x){setTimeout(listen,400)}}
+async function turn(q){
+const my=++call.tok;setS("thinking");
+let txt=await sendMsg(q,{voice:true});
+if(!call.on||my!==call.tok)return;
+if(!txt){cap.innerHTML="<small>شفرة</small>حصلت مشكلة، هنحاول تاني.";setTimeout(()=>{if(call.on&&my===call.tok)listen()},1200);return}
+setS("speaking");cap.innerHTML="<small>شفرة</small>";cap.append(plain(txt));
+speak(txt,()=>{if(call.on&&my===call.tok)listen()})}
+async function startCall(){
+if(!SR){toast("المحادثة الصوتية محتاجة متصفح Google Chrome أو Edge أو Safari.");return}
+if(!(await window.getToken())){window.showGate();return}
+stopDict();speak.stop();call.on=true;cap.textContent="";callEl.classList.add("on");closeSide();listen()}
+function endCall(){call.on=false;call.tok++;try{call.rec&&call.rec.abort()}catch(e){}speak.stop();callEl.classList.remove("on")}
+$("cb").onclick=startCall;$("ce").onclick=endCall;
+$("co").onclick=()=>{if(!call.on||busy)return;try{call.rec&&call.rec.abort()}catch(e){}speak.stop();call.tok++;listen()};
 ui();
 </script>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import {getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-import {getFirestore,doc,getDoc,setDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import {getFirestore,doc,getDoc,setDoc,deleteDoc,collection,getDocs,serverTimestamp} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 const app=initializeApp({apiKey:"AIzaSyBoFoDNsLx-UGxFKMaSNWBCjjR_geXs2bo",authDomain:"shefra-ai.firebaseapp.com",projectId:"shefra-ai",storageBucket:"shefra-ai.firebasestorage.app",messagingSenderId:"118805472184",appId:"1:118805472184:web:9e30d6de84624d8a3aa54d"});
 const auth=getAuth(app),db=getFirestore(app);
 const $=id=>document.getElementById(id),gate=$("gate");
+let SU=null;const sk=()=>"shefra_chats_"+SU;
+const rl=()=>{try{return JSON.parse(localStorage.getItem(sk())||"[]")}catch(e){return[]}};
+const wl=a=>{try{localStorage.setItem(sk(),JSON.stringify(a))}catch(e){}};
+window.store={
+async load(u){SU=u;const m=new Map(rl().map(c=>[c.id,c]));
+try{const sn=await getDocs(collection(db,"users",u,"chats"));sn.forEach(d=>{const c={id:d.id,...d.data()};const o=m.get(c.id);if(!o||(c.updated||0)>=(o.updated||0))m.set(c.id,c)});wl([...m.values()])}catch(e){}
+return [...m.values()]},
+save(c){if(!SU)return;wl([c,...rl().filter(x=>x.id!==c.id)]);setDoc(doc(db,"users",SU,"chats",c.id),{title:c.title,messages:c.messages,updated:c.updated}).catch(()=>{})},
+del(id){if(!SU)return;wl(rl().filter(x=>x.id!==id));deleteDoc(doc(db,"users",SU,"chats",id)).catch(()=>{})}
+};
+
 window.getToken=()=>auth.currentUser?auth.currentUser.getIdToken():Promise.resolve(null);
 window.showGate=()=>gate.classList.add("on");
 $("gl").onclick=async()=>{$("ge").textContent="";try{await signInWithPopup(auth,new GoogleAuthProvider())}catch(e){$("ge").textContent="تسجيل الدخول ماكملش، جرب تاني."}};
 $("out").onclick=()=>signOut(auth).then(()=>location.reload());
 onAuthStateChanged(auth,async u=>{
-if(!u){gate.classList.add("on");$("un").textContent="";$("out").hidden=true;return}
-gate.classList.remove("on");$("un").textContent=u.displayName||"";$("out").hidden=false;
+if(!u){gate.classList.add("on");$("un").textContent="";$("out").hidden=true;window.onAuth&&window.onAuth(null);return}
+gate.classList.remove("on");$("un").textContent=u.displayName||"";$("out").hidden=false;window.onAuth&&window.onAuth(u);
 try{const r=doc(db,"users",u.uid);if(!(await getDoc(r)).exists())await setDoc(r,{name:u.displayName||"بدون اسم",createdAt:serverTimestamp()})}catch(e){}
 });
 </script>
